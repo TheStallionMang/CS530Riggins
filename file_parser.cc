@@ -95,6 +95,10 @@ string file_parser::get_token(unsigned int row, unsigned int column){
         // similar tokens in a column. The fields should match the 
         // order of token fields given above (label/opcode/operands/comments)
 void file_parser::print_file(){
+	for(int i=0;i < tokens.size(); i++){
+		cout<<token[i].label << '\t' << token[i].opcode << '\t' << token[i].operand << '\t' << token[i].comment << endl;
+		
+	}
 
 }
         
