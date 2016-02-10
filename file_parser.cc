@@ -1,7 +1,7 @@
 /*  file_parser.cc
     Exception class for file_parser
     
-    Team New Mexico: Arthur Flores, Christain, Jay, Nick
+    Team New Mexico: Arthur Flores, Christain, Jay, Nick Schneider
     Assignment Due Date: Tuesday, Feb 23rd
     
     CS530 Spring 2016
