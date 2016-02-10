@@ -52,14 +52,12 @@ void file_parser::read_file(){
 				type=3;
 			}
 			else if(isspace(*c) && type != 3){ //This detects a space
-				//cout << "space" << word << endl;
 				read_line.read_word(word,type);
 				while(isspace(*c)) c++;
 				c--;
 				type++;
 			}
 			else{
-				//cout  << *c << endl;
 				word += *c;
 			}
 			c++;
