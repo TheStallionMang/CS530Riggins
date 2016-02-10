@@ -46,17 +46,20 @@ void file_parser::read_file(){
 		bool comment = false;
 		unsigned int type = 0;
 		
-		while(*c != '\n'){
+		while(*c && *c != '\n'){
 			if( *c == '.'){
 				comment = true;
-				type = 3;
+				type=3;
 			}
 			else if(isspace(*c) && type != 3){ //This detects a space
+				//cout << "space" << word << endl;
 				read_line.read_word(word,type);
 				while(isspace(*c)) c++;
+				c--;
 				type++;
 			}
 			else{
+				//cout  << *c << endl;
 				word += *c;
 			}
 			c++;
@@ -65,9 +68,7 @@ void file_parser::read_file(){
 		read_line.read_word(word,type);
 		tokens.push_back(read_line);	
 	}//end for loop
-
-
-}    
+} 
         
         // returns the token found at (row, column).  Rows and columns
         // are zero based.  Returns the empty string "" if there is no 
@@ -95,11 +96,10 @@ string file_parser::get_token(unsigned int row, unsigned int column){
         // similar tokens in a column. The fields should match the 
         // order of token fields given above (label/opcode/operands/comments)
 void file_parser::print_file(){
-	for(int i=0;i < tokens.size(); i++){
-		cout<<token[i].label << '\t' << token[i].opcode << '\t' << token[i].operand << '\t' << token[i].comment << endl;
-		
-	}
-
+	for(unsigned int i=0;i < tokens.size(); i++){
+		cout << tokens[i].label << '\t' << tokens[i].opcode << '\t' << tokens[i].operand <<
+		'\t' << tokens[i].comment << endl;
+	}	
 }
         
         // returns the number of lines in the source code file
