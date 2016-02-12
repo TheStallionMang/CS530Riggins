@@ -39,34 +39,43 @@ file_parser::~file_parser(){}
         // if the source code file fails to conform to the above
         // specification, this is an error condition.     
 void file_parser::read_file(){
+	string delimiters = " \t";
+	string comment = ".";
 	for(unsigned int i=0; i < contents.size(); i++){
 		s_line read_line;
-		string word;
-		char *c = &contents[i][0];
-		bool comment = false;
-		unsigned int type = 0;
-		
-		while(*c && *c != '\n'){
-			if( *c == '.'){
-				comment = true;
-				type=3;
+		unsigned int type=0;
+		string line = contents[i];
+		int last = line.find_first_not_of(delimiters,0);
+		int first = line.find_first_of(delimiters,last);
+		string token = "";
+		while(first != -1 || last != -1){
+			token = line.substr(last,first-last);
+			if(token.rfind(comment) != std::string::npos){ 
+				// if you find a . for comment you take rest of line as comment
+				type = 3;
+				string tmp = token;
+				last = line.find_first_not_of("",first);
+				first = line.find_first_of("",last);
+				if( first != -1 || last != -1){
+				token = line.substr(last,first-last);
+				tmp = tmp + token;
+				}
+				read_line.read_word(tmp,type);
+				break;
 			}
-			else if(isspace(*c) && type != 3){ //This detects a space
-				read_line.read_word(word,type);
-				while(isspace(*c)) c++;
-				c--;
-				type++;
+			if(type >= 3){	//if there are too many arguments
+				cout << "Too many arguments in line blah" << endl;
+				break;
 			}
-			else{
-				word += *c;
-			}
-			c++;
-			if(type > 3) file_parse_exception("Too many tokens on line: "+ i); //convert i to string for error
-		} // end while loop
-		read_line.read_word(word,type);
-		tokens.push_back(read_line);	
-	}//end for loop
-} 
+			read_line.read_word(token,type); // places token in correct position in struct
+			last = line.find_first_not_of(delimiters,first);
+			first = line.find_first_of(delimiters,last);
+			type++;
+			
+		}	
+		tokens.push_back(read_line);
+	}
+}
         
         // returns the token found at (row, column).  Rows and columns
         // are zero based.  Returns the empty string "" if there is no 
